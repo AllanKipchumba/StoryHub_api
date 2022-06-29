@@ -25,12 +25,6 @@ router
         const match = {};
         const sort = {};
 
-        // if a query parameter is idedprov to the endpoint
-        if (req.query.completed) {
-            // create a key-value(boolean) pair for the declared object
-            match.completed = req.query.completed === "true";
-        }
-
         if (req.query.sortBy) {
             const parts = req.query.sortBy.split(":");
             sort[parts[0]] = parts[1] === "desc" ? -1 : 1;
@@ -53,25 +47,26 @@ router
             console.log(e);
         }
     });
+
 router
-    .route("/tasks/:id")
+    .route("/posts/:id")
     .get(auth, async(req, res) => {
         const _id = req.params.id;
 
         try {
-            const task = await Task.findOne({ _id, owner: req.user._id });
+            const post = await Post.findOne({ _id, owner: req.user._id });
 
-            if (!task) {
+            if (!postMessage) {
                 return res.status(404).send();
             }
-            res.send(task);
+            res.send(post);
         } catch (e) {
             res.status(500).send(e);
         }
     })
     .patch(auth, async(req, res) => {
         const updates = Object.keys(req.body);
-        const allowedUpdates = ["description", "completed"];
+        const allowedUpdates = ["title", "description"];
         const isValidOperation = updates.every((update) =>
             allowedUpdates.includes(update)
         );
@@ -80,34 +75,34 @@ router
             return res.status(400).send({ Error: "Invalid updates!" });
         }
         try {
-            const task = await task.findOne({
+            const post = await Post.findOne({
                 _id: req.params.id,
                 owner: req.user._id,
             });
 
-            if (!task) {
+            if (!post) {
                 return res.status(404).send();
             }
 
-            updates.forEach((update) => (task[update] = req.body[update]));
+            updates.forEach((update) => (post[update] = req.body[update]));
 
-            await task.save();
-            res.send(task);
+            await post.save();
+            res.send(post);
         } catch (e) {
             res.status(400).send(e);
         }
     })
     .delete(auth, async(req, res) => {
         try {
-            const task = await Task.findOneAndDelete({
+            const post = await Post.findOneAndDelete({
                 _id: req.params.id,
                 owner: req.user._id,
             });
 
-            if (!task) {
+            if (!post) {
                 return res.status(404).send();
             }
-            res.send(task);
+            res.send(post);
         } catch (e) {
             res.status(500).send();
         }
