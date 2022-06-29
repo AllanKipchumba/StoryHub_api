@@ -1,6 +1,7 @@
 require("dotenv").config();
 const express = require("express");
 const userRouter = require("./routers/users");
+const postRouter = require("./routers/posts");
 const mongoose = require("mongoose");
 
 // mongodb  connection
@@ -18,5 +19,6 @@ app.use(express.json());
 // });
 
 app.use(userRouter);
+app.use(postRouter);
 
 app.listen(port, () => console.log(`App listening on port ${port}`));

@@ -15,38 +15,43 @@ router
             await post.save();
             res.status(201).send(post);
         } catch (e) {
-            res.send(e);
+            res.send(`Error: ${e}`);
         }
     })
-    // GET /tasks?completed=true
-    // GET /tasks?limit=10&skip=10
-    // GET /tasks?sortBy=createdAt_asc
-    .get(auth, async(req, res) => {
-        const match = {};
-        const sort = {};
-
-        if (req.query.sortBy) {
-            const parts = req.query.sortBy.split(":");
-            sort[parts[0]] = parts[1] === "desc" ? -1 : 1;
-        }
-
+    .get(async(req, res) => {
         try {
-            // populate all tasks associated with this user
-            await req.user.populate({
-                path: "tasks",
-                match,
-                options: {
-                    limit: parseInt(req.query.limit),
-                    skip: parseInt(req.query.skip),
-                    sort,
-                },
-            });
-            res.send(req.user.tasks);
-        } catch (e) {
-            res.status(500).send(e);
-            console.log(e);
+            const posts = await Post.find();
+            res.send(posts);
+        } catch (err) {
+            res.status(500).send(`Error: ${err}`);
         }
     });
+
+// GET /tasks?limit=10&skip=10
+// GET /tasks?sortBy=createdAt_asc
+router.route("/myPosts").get(auth, async(req, res) => {
+    const sort = {};
+
+    if (req.query.sortBy) {
+        const parts = req.query.sortBy.split(":");
+        sort[parts[0]] = parts[1] === "desc" ? -1 : 1;
+    }
+
+    try {
+        // populate all posts associated with this user
+        await req.user.populate({
+            path: "posts",
+            options: {
+                limit: parseInt(req.query.limit),
+                skip: parseInt(req.query.skip),
+                sort,
+            },
+        });
+        res.send(req.user.posts);
+    } catch (e) {
+        res.status(500).send(`Error: ${e}`);
+    }
+});
 
 router
     .route("/posts/:id")
