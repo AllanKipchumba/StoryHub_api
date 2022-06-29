@@ -5,7 +5,7 @@ const auth = require("../middleware/auth");
 
 // chained route handlers
 router
-    .route("/posts")
+    .route("/")
     .post(auth, async(req, res) => {
         const post = new Post({
             ...req.body,
@@ -21,7 +21,12 @@ router
     // fetch all posts
     .get(async(req, res) => {
         try {
-            const posts = await Post.find();
+            //pagination && sorting
+            const limitValue = req.query.limit || 3;
+            const skipValue = req.query.skip || 0;
+            const posts = await Post.find().limit(limitValue).skip(skipValue).sort({
+                createdAt: -1,
+            });
             res.send(posts);
         } catch (err) {
             res.status(500).send(`Error: ${err}`);
@@ -43,8 +48,8 @@ router.route("/myPosts").get(auth, async(req, res) => {
         await req.user.populate({
             path: "posts",
             options: {
-                limit: parseInt(req.query.limit),
-                skip: parseInt(req.query.skip),
+                limit: parseInt(req.query.limit || 2),
+                skip: parseInt(req.query.skip || 0),
                 sort,
             },
         });
