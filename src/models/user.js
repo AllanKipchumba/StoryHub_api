@@ -4,7 +4,7 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const Post = require("./posts");
 
-const UserSchema = new mongoose.Schema({
+const userSchema = new mongoose.Schema({
     username: {
         type: String,
         required: true,
@@ -43,7 +43,7 @@ const UserSchema = new mongoose.Schema({
             required: true,
         },
     }, ],
-    profilePic: {
+    avatar: {
         type: Buffer,
     },
 }, { timestamps: true });
@@ -52,6 +52,7 @@ const UserSchema = new mongoose.Schema({
 userSchema.methods.generateAuthTokens = async function() {
     const user = this;
     // create token
+
     const token = jwt.sign({ _id: user._id.toString() }, process.env.JWT_SECRET);
 
     // save token to db
@@ -111,11 +112,11 @@ userSchema.pre("remove", async function(next) {
 });
 
 // CREATE VIRTUAL RELATIONSHIP WITH POST MODEL
-UserSchema.virtual("posts", {
+userSchema.virtual("posts", {
     ref: "Post",
     localField: "_id",
     foreignField: "owner",
 });
 
-const User = mongoose.model("User", UserSchema);
+const User = mongoose.model("User", userSchema);
 module.exports = User;
