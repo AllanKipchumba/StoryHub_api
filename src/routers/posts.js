@@ -18,6 +18,7 @@ router
             res.send(`Error: ${e}`);
         }
     })
+    // fetch all posts
     .get(async(req, res) => {
         try {
             const posts = await Post.find();
@@ -61,12 +62,13 @@ router
         try {
             const post = await Post.findOne({ _id, owner: req.user._id });
 
-            if (!postMessage) {
+            if (!post) {
                 return res.status(404).send();
             }
             res.send(post);
         } catch (e) {
-            res.status(500).send(e);
+            res.status(500).send(`Error: ${e}`);
+            console.log(e);
         }
     })
     .patch(auth, async(req, res) => {
@@ -109,7 +111,7 @@ router
             }
             res.send(post);
         } catch (e) {
-            res.status(500).send();
+            res.status(500).send(`Error: ${e}`);
         }
     });
 
