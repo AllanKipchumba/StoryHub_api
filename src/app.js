@@ -5,7 +5,8 @@ const postRouter = require("./routers/posts");
 const mongoose = require("mongoose");
 
 // mongodb  connection
-mongoose.connect("mongodb://localhost:27017/blog-api", {
+const mongodb_uri = process.env.MONGODB_URL;
+mongoose.connect(`${mongodb_uri}`, {
     useNewUrlParser: true,
 });
 // end of db connection
