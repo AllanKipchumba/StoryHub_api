@@ -60,7 +60,7 @@ router.route("/myPosts").get(auth, async(req, res) => {
 });
 
 router
-    .route("/posts/:id")
+    .route("/:id")
     .get(auth, async(req, res) => {
         const _id = req.params.id;
 
