@@ -2,6 +2,7 @@ const express = require("express");
 const router = new express.Router();
 const Post = require("../models/posts");
 const auth = require("../middleware/auth");
+const User = require("./../models/user");
 
 // chained route handlers
 router
@@ -63,14 +64,19 @@ router
     .route("/:id")
     .get(async(req, res) => {
         const _id = req.params.id;
-
         try {
             const post = await Post.findOne({ _id });
+
+            // access pose-owner's username
+            const owner_id = post.owner;
+            const owner = await User.findById(owner_id);
+            const postOwner = owner.username;
 
             if (!post) {
                 return res.status(404).send();
             }
-            res.send(post);
+            // send post and postOwner
+            res.send({ post, postOwner });
         } catch (e) {
             res.status(500).send(`Error: ${e}`);
             console.log(e);
