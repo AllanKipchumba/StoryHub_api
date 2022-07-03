@@ -22,7 +22,7 @@ router
     .get(async(req, res) => {
         try {
             //pagination && sorting
-            const limitValue = req.query.limit || 3;
+            const limitValue = req.query.limit || 10;
             const skipValue = req.query.skip || 0;
             const posts = await Post.find().limit(limitValue).skip(skipValue).sort({
                 createdAt: -1,
@@ -61,11 +61,11 @@ router.route("/myPosts").get(auth, async(req, res) => {
 
 router
     .route("/:id")
-    .get(auth, async(req, res) => {
+    .get(async(req, res) => {
         const _id = req.params.id;
 
         try {
-            const post = await Post.findOne({ _id, owner: req.user._id });
+            const post = await Post.findOne({ _id });
 
             if (!post) {
                 return res.status(404).send();
