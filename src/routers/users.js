@@ -7,7 +7,7 @@ const sharp = require("sharp");
 
 //  CHAINED ROUTE HANDLERS
 router
-    .route("/users")
+    .route("/register")
     // sign up
     .post(async(req, res) => {
         try {
@@ -24,7 +24,7 @@ router
     });
 
 // log in
-router.route("/users/login").post(async(req, res) => {
+router.route("/login").post(async(req, res) => {
     try {
         const user = await User.findByCredentials(
             req.body.email,
@@ -39,7 +39,7 @@ router.route("/users/login").post(async(req, res) => {
 });
 
 router
-    .route("/users/me")
+    .route("/profile")
     // read my profile
     .get(auth, (req, res) => {
         res.send(req.user);
@@ -76,7 +76,7 @@ router
     });
 
 // log out >> clear tokens from one device
-router.route("/users/logout").post(auth, async(req, res) => {
+router.route("/logout").post(auth, async(req, res) => {
     try {
         // filter out the token belonging to the device the user used at log in
         req.user.tokens = req.user.tokens.filter((token) => {
@@ -103,7 +103,7 @@ const upload = multer({
     },
 });
 router
-    .route("/users/me/avatar")
+    .route("/profile/avatar")
     // upload avatar
     .post(
         auth,
@@ -132,7 +132,7 @@ router
     });
 
 // serving up user profile image
-router.get("/users/:id/avatar", async(req, res) => {
+router.get("/:id/avatar", async(req, res) => {
     try {
         const user = await User.findById(req.params.id);
 
