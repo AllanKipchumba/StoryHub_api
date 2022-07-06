@@ -129,16 +129,22 @@ router
         req.user.avatar = undefined;
         await req.user.save();
         res.send();
-    })
-    // serve up profile image
-    .get(auth, async(req, res) => {
-        try {
-            const user = req.user;
-            res.set("Content-Type", "image/png");
-            res.send(user.avatar);
-        } catch (error) {
-            res.status(404).send(e);
-        }
     });
+
+// serving up user profile image
+router.get("/profile/avatar/:id", async(req, res) => {
+    try {
+        const user = await User.findById(req.params.id);
+
+        if (!user || !user.avatar) {
+            throw new Error();
+        }
+
+        res.set("Content-Type", "image/png");
+        res.send(user.avatar);
+    } catch (e) {
+        res.status(404).send(e);
+    }
+});
 
 module.exports = router;
