@@ -14,21 +14,21 @@ router
                 owner: req.user._id,
             });
 
-            const name = req.body.categories;
-            const cat = await Category.findOne({ name });
-            // create new category
-            const newCat = new Category({
-                name: req.body.categories,
-            });
+            // const name = req.body.categories;
+            // const cat = await Category.findOne({ name });
+            // // create new category
+            // const newCat = new Category({
+            //     name: req.body.categories,
+            // });
 
-            if (!cat) {
-                await newCat.save();
-            }
+            // if (!cat) {
+            //     await newCat.save();
+            // }
 
             await post.save();
             res.status(201).send(post);
         } catch (e) {
-            res.send(`Error: ${e}`);
+            res.status().send(`Error: ${e}`);
             console.log(e);
         }
     })

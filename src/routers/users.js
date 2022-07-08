@@ -140,7 +140,8 @@ router.get("/profile/avatar/:id", async(req, res) => {
             throw new Error();
         }
 
-        res.set("Content-Type", "image/png");
+        // res.set("Content-Type", "image/png");
+        res.type("image/png");
         res.send(user.avatar);
     } catch (e) {
         res.status(404).send(e);
