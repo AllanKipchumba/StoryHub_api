@@ -28,8 +28,8 @@ router
             await post.save();
             res.status(201).send(post);
         } catch (e) {
-            res.status().send(`Error: ${e}`);
-            console.log(e);
+            res.send(`Error: ${e}`);
+            // console.log(e);
         }
     })
     // fetch all posts
