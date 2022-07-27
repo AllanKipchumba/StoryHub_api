@@ -63,6 +63,7 @@ router
             res.send(req.user);
         } catch (e) {
             res.status(400).send(e);
+            console.log(e);
         }
     })
     // delete user

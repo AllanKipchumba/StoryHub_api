@@ -4,6 +4,7 @@ const Post = require("../models/posts");
 const auth = require("../middleware/auth");
 const User = require("./../models/user");
 const Category = require("../models/category");
+
 // chained route handlers
 router
     .route("/")
@@ -13,17 +14,6 @@ router
                 ...req.body,
                 owner: req.user._id,
             });
-
-            // const name = req.body.categories;
-            // const cat = await Category.findOne({ name });
-            // // create new category
-            // const newCat = new Category({
-            //     name: req.body.categories,
-            // });
-
-            // if (!cat) {
-            //     await newCat.save();
-            // }
 
             await post.save();
             res.status(201).send(post);
