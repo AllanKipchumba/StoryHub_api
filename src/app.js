@@ -12,7 +12,7 @@ mongoose.connect(`${mongodb_uri}`, {
 // end of db connection
 
 const app = express();
-const port = 5000;
+const port = process.env.PORT || 5000;
 app.use(express.json());
 
 app.use("/api/auth", userRouter);
