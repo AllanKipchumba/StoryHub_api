@@ -3,7 +3,6 @@ const router = new express.Router();
 const Post = require("../models/posts");
 const auth = require("../middleware/auth");
 const User = require("./../models/user");
-const Category = require("../models/category");
 
 // chained route handlers
 router
