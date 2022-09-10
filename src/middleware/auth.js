@@ -13,7 +13,7 @@ const auth = async(req, res, next) => {
         if (!user) {
             throw new Error();
         }
-        // give the route handler access to the user and token fetched from the db
+        // give the route handler access to the user and user-token fetched from the db
         req.token = token;
         req.user = user;
         next();
