@@ -19,6 +19,12 @@ const PostSchema = new mongoose.Schema({
         required: true,
         ref: "User",
     },
+
+    comments: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Comment",
+    }, ],
+
     categories: {
         type: Array,
         required: false,
@@ -26,7 +32,7 @@ const PostSchema = new mongoose.Schema({
 }, { timestamps: true });
 
 //create a virtual relationship with Comment model
-PostSchema.virtual("comments", {
+PostSchema.virtual("text", {
     ref: "Comment",
     localField: "_id",
     foreignField: "post",
