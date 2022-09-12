@@ -3,10 +3,12 @@ const router = new express.Router();
 const Post = require("../models/posts");
 const auth = require("../middleware/auth");
 const User = require("./../models/user");
+const Comment = require("../models/comments");
 
 // chained route handlers
 router
     .route("/")
+    //create a post
     .post(auth, async(req, res) => {
         try {
             const post = new Post({
@@ -18,7 +20,6 @@ router
             res.status(201).send(post);
         } catch (e) {
             res.send(`Error: ${e}`);
-            // console.log(e);
         }
     })
     // fetch all posts
@@ -68,6 +69,7 @@ router
 
 router
     .route("/:id")
+    //fetch a particular post
     .get(async(req, res) => {
         const _id = req.params.id;
         try {
@@ -88,6 +90,7 @@ router
             console.log(e);
         }
     })
+    //update a post
     .patch(auth, async(req, res) => {
         const updates = Object.keys(req.body);
         const allowedUpdates = ["title", "description"];
@@ -116,12 +119,15 @@ router
             res.status(400).send(e);
         }
     })
+    //delete a post
     .delete(auth, async(req, res) => {
         try {
             const post = await Post.findOneAndDelete({
                 _id: req.params.id,
                 owner: req.user._id,
             });
+            //delete all comments associated with that post
+            await Comment.deleteMany({ post: req.params.id });
 
             if (!post) {
                 return res.status(404).send();
