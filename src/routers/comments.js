@@ -4,46 +4,47 @@ const Comment = require("../models/comments");
 const auth = require("../middleware/auth");
 const Post = require("../models/posts");
 
-router.route("/:id/comment").post(auth, async(req, res) => {
-    try {
-        // find out which post you are commenting
-        const id = req.params.id;
-        // get the comment text and record post id
-        const comment = new Comment({
-            text: req.body.comment,
-            post: id,
-        });
-        // save comment
-        await comment.save();
+router
+    .route("/:id/comment")
+    //add a comment to a post
+    .post(auth, async(req, res) => {
+        try {
+            // get post id
+            const id = req.params.id;
+            //create a comment
+            const comment = new Comment({
+                text: req.body.comment,
+                post: id,
+            });
+            // save comment
+            await comment.save();
 
-        // get this particular post
-        const commentedPost = await Post.findById(id);
-        // push the comment into the post.comments array
-        commentedPost.comments.push(comment);
-        //save
-        await commentedPost.save();
-        //access comment from Comment model
-        const comments_array = commentedPost.comments;
+            // get this particular post with a new comment
+            const commentedPost = await Post.findById(id);
+            // make the post aware of the new comment
+            commentedPost.comments.push(comment);
+            //save the post to update the new comment
+            await commentedPost.save();
 
-        if (comments_array === 0) {
-            return res.status(404).send();
+            res.status(201).send();
+        } catch (error) {
+            res.status(500).send(`Error: ${error}`);
         }
-
-        //loop through each comment array and return comment
-        comments_array.map(async(comment) => {
-            //stringify the array
-            const comment_id = comment.toString();
-            //access comment from db
-            const comment_text = await Comment.findById(comment_id);
-            // console.log(comment_text.text);
-            const { text } = comment_text;
-            console.log(text);
-        });
-        res.status(200).send();
-    } catch (error) {
-        res.status(500).send(`Error: ${error}`);
-        console.log(error);
-    }
-});
+    })
+    //access comments on a post
+    .get(auth, async(req, res) => {
+        try {
+            //get post id
+            const post_id = req.params.id;
+            //query for all comments associated with that post
+            const comments = await Comment.find({
+                post: `${post_id}`,
+            });
+            //send comments to client
+            res.status(200).send(comments);
+        } catch (error) {
+            res.status(500).send(`Error: ${error}`);
+        }
+    });
 
 module.exports = router;
