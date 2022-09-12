@@ -54,7 +54,7 @@ router
             if (!comment_id) {
                 throw new Error();
             }
-            const deleted_comment = await Comment.findByIdAndDelete(comment_id);
+            await Comment.findByIdAndDelete(comment_id);
             res.status(204).send();
         } catch (error) {
             res.status(500).send(`Error: ${error}`);

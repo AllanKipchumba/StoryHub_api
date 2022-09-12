@@ -102,19 +102,17 @@ userSchema.methods.toJSON = function() {
     return userObject;
 };
 
-// DELETE USER'S POSTS WHEN ACCOUNT IS DELETED
-userSchema.pre("remove", async function(next) {
-    const user = this;
-    await Post.deleteMany({ owner: user._id });
-
-    next();
-});
-
 // CREATE VIRTUAL RELATIONSHIP WITH POST MODEL
 userSchema.virtual("posts", {
     ref: "Post",
     localField: "_id",
     foreignField: "owner",
+});
+//create virtual relationship with Comment model
+userSchema.virtual("comments", {
+    ref: "Comment",
+    localField: "_id",
+    foreignField: "userID",
 });
 
 const User = mongoose.model("User", userSchema);
