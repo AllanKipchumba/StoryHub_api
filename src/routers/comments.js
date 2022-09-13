@@ -13,6 +13,7 @@ router
             const id = req.params.id;
             //create a comment
             const comment = new Comment({
+                userID: req.user._id,
                 text: req.body.comment,
                 post: id,
             });
