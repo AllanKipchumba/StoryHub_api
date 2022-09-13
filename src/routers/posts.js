@@ -46,9 +46,7 @@ router
                     });
             } else if (categoryName) {
                 posts = await Post.find({
-                        categories: {
-                            $in: [categoryName],
-                        },
+                        category: categoryName,
                     })
                     .limit(limitValue)
                     .skip(skipValue)
@@ -61,7 +59,7 @@ router
                 });
             }
 
-            res.send(posts);
+            res.status(200).send(posts);
         } catch (err) {
             res.status(500).send(`Error: ${err}`);
         }

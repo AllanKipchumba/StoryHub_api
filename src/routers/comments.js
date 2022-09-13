@@ -14,20 +14,13 @@ router
             //create a comment
             const comment = new Comment({
                 userID: req.user._id,
-                text: req.body.comment,
-                post: id,
+                postID: id,
+                comment: req.body.comment,
             });
             // save comment
             await comment.save();
 
-            // get this particular post with a new comment
-            const commentedPost = await Post.findById(id);
-            // make the post aware of the new comment
-            commentedPost.comments.push(comment);
-            //save the post to update the new comment
-            await commentedPost.save();
-
-            res.status(201).send();
+            res.status(201).send(comment);
         } catch (error) {
             res.status(500).send(`Error: ${error}`);
         }
@@ -40,7 +33,8 @@ router
             //query for all comments associated with that post
             const comments = await Comment.find({
                 post: `${post_id}`,
-            });
+            }).sort({ createdAt: -1 });
+
             //send comments to client
             res.status(200).send(comments);
         } catch (error) {

@@ -1,5 +1,4 @@
 const mongoose = require("mongoose");
-const Comment = require("./comments");
 
 const PostSchema = new mongoose.Schema({
     title: {
@@ -18,26 +17,13 @@ const PostSchema = new mongoose.Schema({
     owner: {
         type: mongoose.Schema.Types.ObjectId,
         required: true,
-        ref: "User",
     },
 
-    comments: [{
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "Comment",
-    }, ],
-
-    categories: {
-        type: Array,
+    category: {
+        type: String,
         required: false,
     },
 }, { timestamps: true });
-
-//create a virtual relationship with Comment model
-PostSchema.virtual("text", {
-    ref: "Comment",
-    localField: "_id",
-    foreignField: "post",
-});
 
 const Post = mongoose.model("Post", PostSchema);
 module.exports = Post;

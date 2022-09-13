@@ -102,18 +102,5 @@ userSchema.methods.toJSON = function() {
     return userObject;
 };
 
-// CREATE VIRTUAL RELATIONSHIP WITH POST MODEL
-userSchema.virtual("posts", {
-    ref: "Post",
-    localField: "_id",
-    foreignField: "owner",
-});
-//create virtual relationship with Comment model
-userSchema.virtual("comments", {
-    ref: "Comment",
-    localField: "_id",
-    foreignField: "userID",
-});
-
 const User = mongoose.model("User", userSchema);
 module.exports = User;
