@@ -3,6 +3,7 @@ const express = require("express");
 const userRouter = require("./routers/users");
 const postRouter = require("./routers/posts");
 const commentsRouter = require("./routers/comments");
+const likesRouter = require("./routers/likes");
 const mongoose = require("mongoose");
 const cors = require("cors");
 
@@ -20,6 +21,7 @@ app.use(cors());
 
 app.use("/api/auth", userRouter);
 app.use("/api/posts", postRouter);
-app.use("/api/post", commentsRouter);
+app.use("/api/post/comment", commentsRouter);
+app.use("/api/post/", likesRouter);
 
 app.listen(port, () => console.log(`App listening on port ${port}`));

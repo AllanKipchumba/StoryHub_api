@@ -18,6 +18,11 @@ const PostSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         required: true,
     },
+    likes: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User",
+        required: false,
+    }, ],
 
     category: {
         type: String,

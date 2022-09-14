@@ -2,10 +2,9 @@ const express = require("express");
 const router = new express.Router();
 const Comment = require("../models/comments");
 const auth = require("../middleware/auth");
-const Post = require("../models/posts");
 
 router
-    .route("/:id/comment")
+    .route("/:id")
     //add a comment to a post
     .post(auth, async(req, res) => {
         try {
@@ -49,6 +48,7 @@ router
             if (!comment_id) {
                 throw new Error();
             }
+            //query comment in db and delete
             await Comment.findByIdAndDelete(comment_id);
             res.status(204).send();
         } catch (error) {
