@@ -9,9 +9,10 @@ router.route("/:id/like").put(auth, async(req, res) => {
         const postID = req.params.id;
         const userID = req.user._id;
 
+        //query this post in db
         const post = await Post.findById(postID);
 
-        //check if user alread liked the post
+        //check if this user has already liked this post
         const userLikedPost = post.likes.includes(userID);
 
         if (userLikedPost) {
@@ -35,13 +36,39 @@ router.route("/:id/unlike").put(auth, async(req, res) => {
         const postID = req.params.id;
         const userID = req.user._id;
 
-        const unlikePost = await Post.findByIdAndUpdate(
-            postID, {
-                $pull: { likes: userID },
-            }, { new: true }
-        );
+        const post = await Post.findById(postID);
 
-        res.status(204).send(unlikePost);
+        //check if this user has liked the post
+        const userLikedPost = post.likes.includes(userID);
+
+        if (!userLikedPost) {
+            res.status(409).send("you have not liked the post post");
+        } else {
+            const unlikePost = await Post.findByIdAndUpdate(
+                postID, {
+                    $pull: { likes: userID },
+                }, { new: true }
+            );
+            res.status(204).send(unlikePost);
+        }
+    } catch (error) {
+        res.status(500).send(`Error: ${error}`);
+    }
+});
+//get number of likes on a posts
+router.route("/:id/likes").get(async(req, res) => {
+    try {
+        const postID = req.params.id;
+        //get this post in db
+        const post = await Post.findById(postID);
+
+        if (!post) {
+            return res.status(404).send("No such post found");
+        }
+        //convert array length to string
+        likes = post.likes.length.toString();
+        // send the number of likes on a post .. .send() does not send intergers
+        res.status(200).send(likes);
     } catch (error) {
         res.status(500).send(`Error: ${error}`);
     }

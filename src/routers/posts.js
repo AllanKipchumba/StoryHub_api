@@ -19,7 +19,8 @@ router
             await post.save();
             res.status(201).send(post);
         } catch (e) {
-            res.send(`Error: ${e}`);
+            res.status(400).send(`Error: ${e}`);
+            console.log(e);
         }
     })
     // fetch all posts
@@ -82,10 +83,10 @@ router
                 return res.status(404).send();
             }
             // send post and postOwner
-            res.send({ post, postOwner });
+            res.status(200).send({ post, postOwner });
         } catch (e) {
-            res.status(500).send(`Error: ${e}`);
-            console.log(e);
+            res.status(400).send(`Error: ${e}`);
+            // console.log(e);
         }
     })
     //update a post

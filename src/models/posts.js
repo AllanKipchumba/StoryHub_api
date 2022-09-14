@@ -4,24 +4,20 @@ const PostSchema = new mongoose.Schema({
     title: {
         type: String,
         required: true,
-        unique: true,
     },
     description: {
         type: String,
         required: true,
     },
-    photo: {
-        type: String,
-        required: false,
-    },
+
     owner: {
         type: mongoose.Schema.Types.ObjectId,
         required: true,
     },
+
     likes: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: "User",
-        required: false,
     }, ],
 
     category: {
