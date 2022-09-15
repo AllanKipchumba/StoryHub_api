@@ -18,9 +18,9 @@ router
 
             await post.save();
             res.status(201).send(post);
-        } catch (e) {
-            res.status(400).send(`Error: ${e}`);
-            console.log(e);
+        } catch (error) {
+            res.status(400).send(`Error: ${error}`);
+            console.log(error);
         }
     })
     // fetch all posts
@@ -33,6 +33,7 @@ router
             const limitValue = req.query.limit || 10;
             const skipValue = req.query.skip || 0;
 
+            // filter posts by authorname
             if (authorName) {
                 const author = await User.find({ username: authorName });
                 if (!author) {
@@ -45,6 +46,8 @@ router
                     .sort({
                         createdAt: -1,
                     });
+
+                //filter posts by category name
             } else if (categoryName) {
                 posts = await Post.find({
                         category: categoryName,
@@ -61,8 +64,8 @@ router
             }
 
             res.status(200).send(posts);
-        } catch (err) {
-            res.status(500).send(`Error: ${err}`);
+        } catch (error) {
+            res.status(500).send(`Error: ${error}`);
         }
     });
 
@@ -70,6 +73,7 @@ router
     .route("/:id")
     //fetch a particular post
     .get(async(req, res) => {
+        //get post id
         const _id = req.params.id;
         try {
             const post = await Post.findOne({ _id });
@@ -84,15 +88,16 @@ router
             }
             // send post and postOwner
             res.status(200).send({ post, postOwner });
-        } catch (e) {
-            res.status(400).send(`Error: ${e}`);
-            // console.log(e);
+        } catch (error) {
+            res.status(400).send(`Error: ${error}`);
         }
     })
     //update a post
     .patch(auth, async(req, res) => {
+        //Get keys of objects send through req.body as an array
         const updates = Object.keys(req.body);
         const allowedUpdates = ["title", "description"];
+        // User can only update the fields tittle and description.
         const isValidOperation = updates.every((update) =>
             allowedUpdates.includes(update)
         );
@@ -114,8 +119,8 @@ router
 
             await post.save();
             res.send(post);
-        } catch (e) {
-            res.status(400).send(e);
+        } catch (error) {
+            res.status(400).send(error);
         }
     })
     //delete a post
@@ -126,14 +131,14 @@ router
                 owner: req.user._id,
             });
             //delete all comments associated with that post
-            await Comment.deleteMany({ post: req.params.id });
+            await Comment.deleteMany({ postID: req.params.id });
 
             if (!post) {
                 return res.status(404).send();
             }
-            res.send(post);
-        } catch (e) {
-            res.status(500).send(`Error: ${e}`);
+            res.status(204).send(post);
+        } catch (error) {
+            res.status(500).send(`Error: ${error}`);
         }
     });
 

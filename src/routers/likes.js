@@ -42,7 +42,7 @@ router.route("/:id/unlike").put(auth, async(req, res) => {
         const userLikedPost = post.likes.includes(userID);
 
         if (!userLikedPost) {
-            res.status(409).send("you have not liked the post post");
+            res.status(409).send("You have not liked the post");
         } else {
             const unlikePost = await Post.findByIdAndUpdate(
                 postID, {
@@ -65,9 +65,10 @@ router.route("/:id/likes").get(async(req, res) => {
         if (!post) {
             return res.status(404).send("No such post found");
         }
-        //convert array length to string
+        //likes are stored in an array. convert array length to string
+        //.send() method does not send intergers
         likes = post.likes.length.toString();
-        // send the number of likes on a post .. .send() does not send intergers
+        // send the number of likes on a post
         res.status(200).send(likes);
     } catch (error) {
         res.status(500).send(`Error: ${error}`);

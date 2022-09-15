@@ -2,7 +2,6 @@ const mongoose = require("mongoose");
 const validator = require("validator");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-const Post = require("./posts");
 
 const userSchema = new mongoose.Schema({
     username: {
@@ -42,9 +41,6 @@ const userSchema = new mongoose.Schema({
             required: true,
         },
     }, ],
-    avatar: {
-        type: Buffer,
-    },
 }, { timestamps: true });
 
 // GENERATE AUTH TOKENS FOR USER
