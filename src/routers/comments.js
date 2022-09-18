@@ -2,6 +2,7 @@ const express = require("express");
 const router = new express.Router();
 const Comment = require("../models/comments");
 const auth = require("../middleware/auth");
+const User = require("../models/user");
 
 router
     .route("/:id")
@@ -33,6 +34,16 @@ router
             const comments = await Comment.find({
                 post: `${post_id}`,
             }).sort({ createdAt: -1 });
+
+            //get author of the comment
+
+            comments.map(async(comment) => {
+                const authorComment = comment.comment;
+                const authorID = comment.userID;
+                //get the name of author of comemnt
+                const author = await User.findById(authorID);
+                console.log(`${authorComment}, ${author.username}`);
+            });
 
             //send comments to client
             res.status(200).send(comments);
