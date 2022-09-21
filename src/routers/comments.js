@@ -35,18 +35,17 @@ router
                 post: `${post_id}`,
             }).sort({ createdAt: -1 });
 
-            //get author of the comment
-
+            //get comment and author of the comment
+            const postComments = [];
             comments.map(async(comment) => {
-                const authorComment = comment.comment;
-                const authorID = comment.userID;
-                //get the name of author of comemnt
-                const author = await User.findById(authorID);
-                console.log(`${authorComment}, ${author.username}`);
+                //push comment and authorID to postComments array
+                postComments.push({
+                    comment: comment.comment,
+                    authorID: comment.userID,
+                });
             });
-
             //send comments to client
-            res.status(200).send(comments);
+            res.status(200).send(postComments);
         } catch (error) {
             res.status(500).send(`Error: ${error}`);
         }
