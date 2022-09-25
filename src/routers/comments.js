@@ -32,7 +32,7 @@ router
             const post_id = req.params.id;
             //query for all comments associated with that post
             const comments = await Comment.find({
-                post: `${post_id}`,
+                postID: post_id,
             }).sort({ createdAt: -1 });
 
             //send comments to client
