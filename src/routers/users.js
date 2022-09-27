@@ -39,7 +39,7 @@ router
     .get(auth, (req, res) => {
         res.send(req.user);
     })
-    // delete user
+    // delete user account
     .delete(auth, async(req, res) => {
         try {
             await req.user.remove();
@@ -60,17 +60,6 @@ router.route("/logout").post(auth, async(req, res) => {
         res.send();
     } catch (error) {
         res.status(500).json(`Error: ${error}`);
-    }
-});
-
-//get user by id
-router.route("/user").get(auth, async(req, res) => {
-    try {
-        const userID = req.body.userID;
-        const user = await User.findById(userID);
-        res.status(200).send(user);
-    } catch (error) {
-        res.status(500).send(`Error: ${error}`);
     }
 });
 
