@@ -68,9 +68,9 @@ router.route("/user").get(auth, async(req, res) => {
     try {
         const userID = req.body.userID;
         const user = await User.findById(userID);
-        res.status(200).send(user.username);
+        res.status(200).send(user);
     } catch (error) {
-        res.status(500).json(`Error: ${error}`);
+        res.status(500).send(`Error: ${error}`);
     }
 });
 
