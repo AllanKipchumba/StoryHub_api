@@ -62,10 +62,9 @@ router
     });
 
 //like comment
-
-router.route("/likeComment").put(auth, async(req, res) => {
+router.route("/:id/like").put(auth, async(req, res) => {
     try {
-        const commentID = req.body.commentID;
+        const commentID = req.params.id;
         const userID = req.user._id;
 
         //find this comment
@@ -90,9 +89,9 @@ router.route("/likeComment").put(auth, async(req, res) => {
 });
 
 //get number likes on a comment
-router.route("/Likes").get(async(req, res) => {
+router.route("/:id/likes").get(async(req, res) => {
     try {
-        const commentID = req.body.commentID;
+        const commentID = req.params.id;
         //find this comment
         const comment = await Comment.findById(commentID);
 
