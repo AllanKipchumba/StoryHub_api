@@ -62,6 +62,7 @@ router
     });
 
 //like comment
+
 router.route("/likeComment").put(auth, async(req, res) => {
     try {
         const commentID = req.body.commentID;
@@ -84,6 +85,27 @@ router.route("/likeComment").put(auth, async(req, res) => {
             res.status(201).send(likeComment);
         }
     } catch (error) {
+        res.status(500).send(`Error: ${error}`);
+    }
+});
+
+//get number likes on a comment
+router.route("/Likes").get(async(req, res) => {
+    try {
+        const commentID = req.body.commentID;
+        //find this comment
+        const comment = await Comment.findById(commentID);
+
+        if (!comment) {
+            return res.status(404).send("No such comment found");
+        }
+        //convert likes to string
+        //.send() method does not send intergers
+        likes = comment.likes.length.toString();
+        // send the number of likes on a comment
+        res.status(200).send(likes);
+    } catch (error) {
+        console.log(error);
         res.status(500).send(`Error: ${error}`);
     }
 });

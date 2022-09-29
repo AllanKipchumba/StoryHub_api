@@ -55,7 +55,7 @@ router.route("/:id/unlike").put(auth, async(req, res) => {
         res.status(500).send(`Error: ${error}`);
     }
 });
-//get number of likes on a posts
+//get number of likes on a post
 router.route("/:id/likes").get(async(req, res) => {
     try {
         const postID = req.params.id;
