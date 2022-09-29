@@ -61,4 +61,31 @@ router
         }
     });
 
+//like comment
+router.route("/likeComment").put(auth, async(req, res) => {
+    try {
+        const commentID = req.body.commentID;
+        const userID = req.user._id;
+
+        //find this comment
+        const comment = await Comment.findById(commentID);
+
+        //check if user has liked comment
+        const userLikedComment = comment.likes.includes(userID);
+
+        if (userLikedComment) {
+            res.status(409).send("Already liked comment");
+        } else {
+            const likeComment = await Comment.findByIdAndUpdate(
+                commentID, {
+                    $push: { likes: userID },
+                }, { new: true }
+            );
+            res.status(201).send(likeComment);
+        }
+    } catch (error) {
+        res.status(500).send(`Error: ${error}`);
+    }
+});
+
 module.exports = router;
