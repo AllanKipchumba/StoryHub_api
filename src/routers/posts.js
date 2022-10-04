@@ -29,8 +29,8 @@ router
         try {
             let posts;
             // pagination && sorting
-            const limitValue = req.query.limit;
-            const skipValue = req.query.skip;
+            const limitValue = req.query.limit || 10;
+            const skipValue = req.query.skip || 0;
 
             // filter posts by authorname
             if (authorName) {
