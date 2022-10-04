@@ -19,11 +19,6 @@ const PostSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: "User",
     }, ],
-
-    category: {
-        type: String,
-        required: false,
-    },
 }, { timestamps: true });
 
 const Post = mongoose.model("Post", PostSchema);

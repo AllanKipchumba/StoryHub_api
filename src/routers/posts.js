@@ -26,7 +26,6 @@ router
     // fetch all posts
     .get(async(req, res) => {
         const authorName = req.query.author;
-        const categoryName = req.query.cat;
         try {
             let posts;
             // pagination && sorting
@@ -41,17 +40,6 @@ router
                 }
                 const authorId = author[0]._id.toString();
                 posts = await Post.find({ owner: authorId })
-                    .limit(limitValue)
-                    .skip(skipValue)
-                    .sort({
-                        createdAt: -1,
-                    });
-
-                //filter posts by category name
-            } else if (categoryName) {
-                posts = await Post.find({
-                        category: categoryName,
-                    })
                     .limit(limitValue)
                     .skip(skipValue)
                     .sort({
