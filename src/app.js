@@ -8,7 +8,7 @@ const mongoose = require("mongoose");
 const cors = require("cors");
 
 // mongodb  connection
-const mongodb_uri = process.env.MONGODB_URL_LOCAL;
+const mongodb_uri = process.env.MONGODB_URL;
 mongoose.connect(`${mongodb_uri}`, {
     useNewUrlParser: true,
 });
@@ -17,8 +17,10 @@ mongoose.connect(`${mongodb_uri}`, {
 const app = express();
 const port = process.env.PORT || 5000;
 app.use(express.json());
+//allow cross-origin resource sharing
 app.use(cors());
 
+//configure routes
 app.use("/api/auth", userRouter);
 app.use("/api/posts", postRouter);
 app.use("/api/post/comment", commentsRouter);
