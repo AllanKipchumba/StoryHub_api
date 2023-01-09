@@ -13,11 +13,13 @@ router
             const id = req.params.id;
             // get the name of author of comment
             const authorProfile = await User.findById(req.user._id);
-            const { username } = authorProfile;
+            const { email } = authorProfile;
+            //create authorName from email
+            const userName = email.substring(0, email.indexOf("@"));
 
             //create a comment
             const comment = new Comment({
-                authorName: username,
+                authorName: userName,
                 postID: id,
                 comment: req.body.comment,
             });

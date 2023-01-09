@@ -71,7 +71,7 @@ router
             const owner = await User.findById(owner_id);
             //access outhor's email address
             email = owner.email;
-            // create userName from email address
+            // create userName from the email address
             userName = email.substring(0, email.indexOf("@"));
             //set post owner to username
             const postOwner = userName;
