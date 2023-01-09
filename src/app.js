@@ -3,6 +3,7 @@ const config = require("./config/config");
 
 require("./db/mongoose");
 const express = require("express");
+const cors = require("cors");
 const userRouter = require("./routers/users");
 const postRouter = require("./routers/posts");
 const commentsRouter = require("./routers/comments");

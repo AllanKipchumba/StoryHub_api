@@ -69,13 +69,15 @@ router
             // access post-owner's username
             const owner_id = post.owner;
             const owner = await User.findById(owner_id);
-            const postOwner = owner.username;
+            //USERNAME NOLONGER EXISTS. CREATE USERNAME FROM EMAIL USING SUBSTRING METHOD
+            // const postOwner = owner.username;
 
             if (!post) {
                 return res.status(404).send();
             }
             // send post and postOwner
-            res.status(200).send({ post, postOwner });
+            // res.status(200).send({ post, postOwner });
+            res.status(200).send({ post });
         } catch (error) {
             res.status(400).send(`Error: ${error}`);
         }
@@ -100,6 +102,7 @@ router
             });
 
             if (!post) {
+                console.log(`no such post`);
                 return res.status(404).send();
             }
 

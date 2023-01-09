@@ -1,6 +1,7 @@
 const express = require("express");
 const router = new express.Router();
 const User = require("../models/user");
+const auth = require("../middleware/auth");
 
 // sign up
 router.route("/register").post(async(req, res) => {
@@ -29,6 +30,20 @@ router.route("/login").post(async(req, res) => {
         res.send({ user, token });
     } catch (error) {
         res.status(400).send(`Error: ${error}`);
+    }
+});
+
+// log out
+router.route("/logout").post(auth, async(req, res) => {
+    try {
+        // filter out the token belonging to the device the user used at log in
+        req.user.tokens = req.user.tokens.filter((token) => {
+            return token.token !== req.token;
+        });
+        await req.user.save();
+        res.send();
+    } catch (error) {
+        res.status(500).json(`Error: ${error}`);
     }
 });
 
