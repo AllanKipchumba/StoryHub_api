@@ -66,18 +66,21 @@ router
         try {
             const post = await Post.findOne({ _id });
 
-            // access post-owner's username
+            // get the author of the post
             const owner_id = post.owner;
             const owner = await User.findById(owner_id);
-            //USERNAME NOLONGER EXISTS. CREATE USERNAME FROM EMAIL USING SUBSTRING METHOD
-            // const postOwner = owner.username;
+            //access outhor's email address
+            email = owner.email;
+            // create userName from email address
+            userName = email.substring(0, email.indexOf("@"));
+            //set post owner to username
+            const postOwner = userName;
 
             if (!post) {
                 return res.status(404).send();
             }
             // send post and postOwner
-            // res.status(200).send({ post, postOwner });
-            res.status(200).send({ post });
+            res.status(200).send({ post, postOwner });
         } catch (error) {
             res.status(400).send(`Error: ${error}`);
         }
@@ -86,7 +89,7 @@ router
     .patch(auth, async(req, res) => {
         //Get keys of objects send through req.body as an array
         const updates = Object.keys(req.body);
-        const allowedUpdates = ["title", "description"];
+        const allowedUpdates = ["title", "description", "imageURL", "category"];
         // User can only update the fields tittle and description.
         const isValidOperation = updates.every((update) =>
             allowedUpdates.includes(update)
