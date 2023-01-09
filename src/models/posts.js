@@ -1,17 +1,28 @@
 const mongoose = require("mongoose");
 
 const PostSchema = new mongoose.Schema({
-    title: {
-        type: String,
+    owner: {
+        type: mongoose.Schema.Types.ObjectId,
         required: true,
     },
-    description: {
+
+    category: {
         type: String,
         required: true,
     },
 
-    owner: {
-        type: mongoose.Schema.Types.ObjectId,
+    imageURL: {
+        type: String,
+        required: true,
+    },
+
+    title: {
+        type: String,
+        required: true,
+    },
+
+    description: {
+        type: String,
         required: true,
     },
 

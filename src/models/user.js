@@ -1,15 +1,10 @@
+const config = require("../config/config");
 const mongoose = require("mongoose");
 const validator = require("validator");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
 const userSchema = new mongoose.Schema({
-    username: {
-        type: String,
-        required: true,
-        //   trim spaces
-        trim: true,
-    },
     email: {
         type: String,
         required: true,
@@ -47,8 +42,7 @@ const userSchema = new mongoose.Schema({
 userSchema.methods.generateAuthTokens = async function() {
     const user = this;
     // create token
-
-    const token = jwt.sign({ _id: user._id.toString() }, process.env.JWT_SECRET);
+    const token = jwt.sign({ _id: user._id.toString() }, config.jwt_secret);
 
     // save token to db
     user.tokens = user.tokens.concat({ token });
@@ -68,9 +62,10 @@ userSchema.pre("save", async function(next) {
     next();
 });
 
-// CHECK IF USER EMAIL EXISTS AND VALIDATE PASSWORD >> { .statics - TARGETS User}
+// CHECK IF USER EMAIL EXISTS AND VALIDATE PASSWORD >>
+//{ .statics - TARGETS User}
 userSchema.statics.findByCredentials = async(email, password) => {
-    // email: email >> destructerd to {email}
+    // email: email  destructerd to {email}
     const user = await User.findOne({ email });
 
     if (!user) {
@@ -86,7 +81,8 @@ userSchema.statics.findByCredentials = async(email, password) => {
     return user;
 };
 
-// HIDE USER'S SENSITIVE DATA >> { .methods - TARGETS user }
+// HIDE USER'S SENSITIVE DATA >>
+//{ .methods - TARGETS user }
 userSchema.methods.toJSON = function() {
     const user = this;
     const userObject = user.toObject();

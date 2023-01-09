@@ -1,13 +1,12 @@
 //import configuration
 const config = require("./config/config");
-const express = require("express");
-// mongodb  connection
+
 require("./db/mongoose");
+const express = require("express");
 const userRouter = require("./routers/users");
 const postRouter = require("./routers/posts");
 const commentsRouter = require("./routers/comments");
 const likesRouter = require("./routers/likes");
-const cors = require("cors");
 
 const app = express();
 app.use(express.json());
