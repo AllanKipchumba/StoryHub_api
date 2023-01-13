@@ -41,14 +41,9 @@ router
                 const authorId = author[0]._id.toString();
                 posts = await Post.find({ owner: authorId })
                     .limit(limitValue)
-                    .skip(skipValue)
-                    .sort({
-                        createdAt: -1,
-                    });
+                    .skip(skipValue);
             } else {
-                posts = await Post.find().limit(limitValue).skip(skipValue).sort({
-                    createdAt: -1,
-                });
+                posts = await Post.find().limit(limitValue).skip(skipValue);
             }
 
             res.status(200).send(posts);
