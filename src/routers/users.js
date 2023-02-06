@@ -89,7 +89,7 @@ router.post("/resetpassword", async (req, res) => {
           });
 
           const dev_url = `http://localhost:3000/reset/${token}`;
-          const prod_url = `to be provided`;
+          const prod_url = `https://storyhub.onrender.com/reset/${token}`;
 
           const mailOptions = {
             to: user.email,
@@ -97,7 +97,7 @@ router.post("/resetpassword", async (req, res) => {
             subject: "StoryHub Password Reset",
             text: `You are receiving this because you (or someone else) have requested the reset of the password for your account.
                    Please click on the following link, or paste this into your browser to complete the process. Link expires in 5 minutes:
-                   ${dev_url} 
+                   ${prod_url} 
                    If you did not request this, please ignore this email and your password will remain unchanged.`,
           };
 
