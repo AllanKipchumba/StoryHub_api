@@ -74,7 +74,7 @@ router.post("/resetpassword", async (req, res) => {
         { _id: user._id },
         {
           resetPasswordToken: token,
-          resetPasswordExpires: Date.now() + 300000,
+          resetPasswordExpires: Date.now() + 300000, //token expires in 5 mins
         },
         (err) => {
           if (err) throw err;
@@ -89,7 +89,6 @@ router.post("/resetpassword", async (req, res) => {
           });
 
           const dev_url = `http://localhost:3000/reset/${token}`;
-          // const prod_url = `https://storyhub.onrender.com/reset/${token}`;
           const prod_url = `storyhub-webapp.vercel.app/reset/${token}`;
 
           const mailOptions = {
