@@ -89,7 +89,8 @@ router.post("/resetpassword", async (req, res) => {
           });
 
           const dev_url = `http://localhost:3000/reset/${token}`;
-          const prod_url = `https://storyhub.onrender.com/reset/${token}`;
+          // const prod_url = `https://storyhub.onrender.com/reset/${token}`;
+          const prod_url = `storyhub-webapp.vercel.app/reset/${token}`;
 
           const mailOptions = {
             to: user.email,
